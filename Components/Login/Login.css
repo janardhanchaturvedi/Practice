@@ -1,0 +1,23 @@
+
+.form-conatainer{
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    min-width: none;
+    
+    
+}
+.EmailConatianer{
+    text-align: center;
+    color: rgb(37, 38, 38);
+}
+button{
+    background-color: #e64646;
+}
+.Input{
+    color: blueviolet;
+    background-color: #f67373;
+}
