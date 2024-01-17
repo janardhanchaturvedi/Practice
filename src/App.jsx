@@ -1,12 +1,12 @@
-import './App.css'
-import SignUp from '../Components/SignUp/SignUp'
+import Home from '../Components/Home/Home'
+import SignUp from '../Components/SignUp/Authentication'
 import Login from '../Components/login/login'
 import CustomRoutes from '../routes/CustomRoutes'
 
 function App() {
   return (
-    <>
-       <CustomRoutes/> 
+    <> 
+    <CustomRoutes/>
     </>
   )
 }
