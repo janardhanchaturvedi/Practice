@@ -3,7 +3,10 @@ import Login from '../Components/login/login'
 
 function Login() {
   return (
-    <Login/>
+    <div className='Center-div'>
+      <Login/>
+    </div>
+    
   )
 }
 

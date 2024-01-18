@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation,useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Profilelogin from "../Profilelogin/Profilelogin";
+import { Encrypt, Decrypt } from "../../EncryptionDecryption/EncryptionDecryption";
 
 function Authentication() {
   const [signUpValue, setSignUpValue] = useState({});
   const [error, setError] = useState({});
   const { pathname } = useLocation();
-  const navigate =  useNavigate();
- 
+  const navigate = useNavigate();
+  const data = JSON.parse(localStorage.getItem("Users"));
+  const key = "123456"
 
   console.log(signUpValue);
   const handleSignUp = (event) => {
@@ -17,7 +19,7 @@ function Authentication() {
   };
   console.log(signUpValue);
   console.log(error);
-  
+
   const Validation = () => {
     let error = {};
     let isValid = true;
@@ -44,42 +46,81 @@ function Authentication() {
       error.password_confirmation = "Password and Confirm Password Not Match";
     }
     console.log(Object.values(error));
+    console.log(signUpValue.password ,signUpValue.password_confirmation);
     if (Object.values(error).length == 0) {
       isValid = true;
     } else {
       isValid = false;
     }
-  console.log(signUpValue);
+    console.log(signUpValue);
     setError(error);
     return isValid;
   };
   //login validation
-  const loginValidation = () =>{
-    const data = JSON.parse(localStorage.getItem('items'));
-    if(signUpValue.email == data.email && signUpValue.password ==  data.password){
-      navigate('/Profile')
 
+  const loginValidation = () => {
+    const data = JSON.parse(localStorage.getItem("Users"));
+    const email = data.find((ele) => ele.email == signUpValue.email);
+   console.log(email);
+    if (!email ) {
+      alert('Email Doesnt Exists')
+      return false;
     }
-  }
+
+    else if(email.password != signUpValue.password){
+        alert('Password Doesnt Match')
+        return false;
+    }else {
+
+      localStorage.setItem("userDetail", JSON.stringify(email))
+      navigate("/Profile");
+      return true;
+    } 
+    
+  
+  };
+  console.log(data);
 
   //Handle Submit Button
   const handleSubmit = () => {
-    
-
     if (Validation()) {
-      localStorage.setItem("items",JSON.stringify(signUpValue))
-      navigate("/login");
-      {pathname== '/login' && loginValidation()}
-     
-     
-      alert(pathname == "/signup" ? "signup Sucess" : "login Sucess")
+      if (pathname == "/signup") {
+        
+        const encryptedPassword = Encrypt(signUpValue.password , key);
+        const encryptedConfirmPassword = Encrypt(signUpValue.password_confirmation , key);
+        
+        // signUpValue.password_confirmation = encryptedConfirmPassword
+        // signUpValue.password = encryptedPassword
+        console.log(encryptedPassword);
+        console.log(encryptedConfirmPassword);
+        if(data){const Users = [signUpValue, ...data]
+          localStorage.setItem("Users", JSON.stringify(Users));
+        }else{
+          const Users = [signUpValue]
+          localStorage.setItem("Users", JSON.stringify(Users));
+        }
+        
+        
+        navigate("/login");
+      } else {
+        loginValidation();
+      }
+
+      {
+        alert(
+          pathname == "/signup"
+            ? "signup Sucess"
+            : loginValidation()
+            ? "login Sucess"
+            : "Please Signup"
+        );
+      }
       // alert('sucess')
     } else {
       alert("Not Sucess");
     }
 
     console.log("====>", error);
-    
   };
 
   return (

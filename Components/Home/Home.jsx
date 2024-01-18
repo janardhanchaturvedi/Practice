@@ -11,7 +11,7 @@ function Home() {
       >
         Home
       </div>
-      <h1>Welcome to Home</h1>
+      <h1  className=" text-white">Welcome to Home</h1>
     </>
   );
 }
